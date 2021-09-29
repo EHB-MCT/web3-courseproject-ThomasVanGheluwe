@@ -112,13 +112,13 @@ export default {
     },
     compareRatingImdb(rating) {
       const value = parseInt(rating);
-      if (value > this.selectedMovie.rating) {
+      if (value > Math.round(this.selectedMovie.imDbRating)) {
         this.selectedMovie.imdbRatingMessage =
-          "IMDb raters think this movie is worse than you";
-      } else if (value < this.selectedMovie.imDbRating) {
+          "IMDb raters think this movie is less good than you";
+      } else if (value < Math.round(this.selectedMovie.imDbRating)) {
         this.selectedMovie.imdbRatingMessage =
           "IMDb raters think this movie is better than you";
-      } else if (value == this.selectedMovie.imDbRating) {
+      } else if (value == Math.round(this.selectedMovie.imDbRating)) {
         this.selectedMovie.imdbRatingMessage =
           "IMDb raters have the same taste as you";
       }
