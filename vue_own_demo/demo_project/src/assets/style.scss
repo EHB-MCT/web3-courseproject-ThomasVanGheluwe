@@ -6,20 +6,34 @@
 
 .movie {
     text-align: center;
-    max-width: 30%;
+    width: 30%;
     border: solid 1px none;
     border-radius: 10px;
     padding: 1% 1%;
     box-shadow: 0px 0px 9px 5px rgba(0, 0, 0, 0.2);
     margin: 2% 0;
+    transition: ease-in 0.5s;
 }
 
-.infoLabel {
+.fetchMessage {
+    margin-top: 1em;
+}
+
+.movie:hover {
+    transition: ease-in 0.5s;
+    background-color: lightblue;
+}
+
+.movie .infoLabel {
     margin-right: 0.5em;
 }
 
 img {
     border-radius: 10px;
+}
+
+.subtitle {
+    font-size: 1.1em;
 }
 
 select {

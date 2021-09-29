@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="has-text-centered">
-      <p>{{ fetchMessage }}</p>
+      <p class="fetchMessage">{{ fetchMessage }}</p>
       <img :src="loadIcon" alt="" style="width: 10%" />
     </div>
     <div class="movies">
       <div class="movie" v-for="movie in movies" :key="movie.id">
         <label for="" class="label">Title</label>
-        <h3 class="subtitle">{{ movie.name }}</h3>
+        <h3 class="subtitle">{{ movie.title }}</h3>
         <img :src="movie.image" alt="" style="width: 90%" />
         <label for="showMore" class="infoLabel">Show more info</label>
         <input
@@ -17,12 +17,12 @@
           id="showMore"
         />
         <div v-show="movie.showInfo">
-          <label for="" class="label">Description</label>
-          <p>{{ movie.description }}</p>
           <label for="" class="label">Release year</label>
-          <p>{{ movie.release }}</p>
-          <label for="" class="label">Imdb rating</label>
-          <p>{{ movie.rating }} / 10</p>
+          <p>{{ movie.year }}</p>
+          <label for="" class="label">IMDb rating</label>
+          <p>{{ Math.round(movie.imDbRating) }} / 10</p>
+          <label for="" class="label">IMDb raters</label>
+          <p>{{ movie.imDbRatingCount }}</p>
           <hr />
         </div>
         <label for="" class="label">Own rating</label>
@@ -50,64 +50,7 @@
 </template>
 
 <script>
-const movies = [
-  {
-    id: 1,
-    name: "Se7en",
-    image: "https://media.s-bol.com/L962xKDE7GEr/550x782.jpg",
-    description:
-      "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
-    release: 1996,
-    rating: Math.round(8.6),
-    ownRating: undefined,
-    ownRatingMessage: "",
-    imdbRatingMessage: "",
-    showInfo: false,
-    rateColor: "",
-  },
-  {
-    id: 2,
-    name: "The Shawshank Redemption",
-    image: "https://media.s-bol.com/xvx1OpjgvVjE/844x1200.jpg",
-    description:
-      "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-    release: 1994,
-    rating: Math.round(9.3),
-    ownRating: undefined,
-    ownRatingMessage: "",
-    imdbRatingMessage: "",
-    showInfo: false,
-    rateColor: "",
-  },
-  {
-    id: 3,
-    name: "The Godfather",
-    image: "https://media.s-bol.com/xkqpRqQ88mLl/550x788.jpg",
-    description:
-      "An organized crime dynasty's aging patriarch transfers control of his clandestine empire to his reluctant son.",
-    release: 1972,
-    rating: Math.round(9.2),
-    ownRating: undefined,
-    ownRatingMessage: "",
-    imdbRatingMessage: "",
-    showInfo: false,
-    rateColor: "",
-  },
-  {
-    id: 3,
-    name: "The Godfather",
-    image: "https://media.s-bol.com/xkqpRqQ88mLl/550x788.jpg",
-    description:
-      "An organized crime dynasty's aging patriarch transfers control of his clandestine empire to his reluctant son.",
-    release: 1972,
-    rating: Math.round(9.2),
-    ownRating: undefined,
-    ownRatingMessage: "",
-    imdbRatingMessage: "",
-    showInfo: false,
-    rateColor: "",
-  },
-];
+import { data } from "../shared/data";
 
 export default {
   name: "Movies",
@@ -133,18 +76,15 @@ export default {
     selectMovie(movie) {
       this.selectedMovie = movie;
     },
-    async getMovies() {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(movies), 1500);
-      });
-    },
+
     async loadMovies() {
-      this.movies = [];
       this.fetchMessage = "loading movies";
-      this.movies = await this.getMovies();
+      this.movies = await data.getMovies();
+      console.log("movies on frontend", this.movies);
       this.fetchMessage = "";
       this.loadIcon = "";
     },
+
     compareRating(rating) {
       const value = parseInt(rating);
       if (value <= 2) {
@@ -174,13 +114,13 @@ export default {
       const value = parseInt(rating);
       if (value > this.selectedMovie.rating) {
         this.selectedMovie.imdbRatingMessage =
-          "Imdb raters think this movie is worse then you";
-      } else if (value < this.selectedMovie.rating) {
+          "IMDb raters think this movie is worse than you";
+      } else if (value < this.selectedMovie.imDbRating) {
         this.selectedMovie.imdbRatingMessage =
-          "Imdb raters think this movie is better then you";
-      } else if (value == this.selectedMovie.rating) {
+          "IMDb raters think this movie is better than you";
+      } else if (value == this.selectedMovie.imDbRating) {
         this.selectedMovie.imdbRatingMessage =
-          "Imdb raters have the same taste as you";
+          "IMDb raters have the same taste as you";
       }
     },
   },
