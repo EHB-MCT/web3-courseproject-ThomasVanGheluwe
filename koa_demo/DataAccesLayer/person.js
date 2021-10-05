@@ -8,7 +8,7 @@ const ObjectId = require('mongodb').ObjectID;
 const save = async (object) => {
     const result = await person.insertOne({name: object.name, age: object.age});
     //returns the data
-    return result.ops[0];
+    //return result;
 };
 
 const getAllPersons = async () => {
@@ -22,7 +22,7 @@ const getPersonById = async id => {
 
 const update = async (id, {name, age}) => {
     const result = await person.replaceOne({_id: ObjectId(id)}, {name, age});
-    return result.ops[0];
+    //return result;
 };
 
 const removeById = async id => {

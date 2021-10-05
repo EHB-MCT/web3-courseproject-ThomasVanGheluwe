@@ -5,6 +5,7 @@ const bodyParser = require('koa-bodyparser');
 //importing the routes
 const personRoutes = require('./routes/persons.routes');
 
+const port = 3000;
 
 //start app
 const app = new Koa();
@@ -15,5 +16,5 @@ app.use(bodyParser());
 //registering the routes
 app.use(personRoutes.routes()).use(personRoutes.allowedMethods());
 
-app.listen(3000);
-console.log("app is running on port 3000");
+app.listen(port);
+console.log(`app is running on port ${port}`);
