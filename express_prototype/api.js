@@ -1,24 +1,29 @@
 "use strict";
 
 
-//REQUIREMENTS
+//EXPRESS
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const reqRouter = express.Router();
+
+
+
+//MongoDB
 let db;
 const dbName = "PrototypeBackend";
 const collectionName = "items";
-
-//MongoDB
 const {MongoClient, ObjectId}  = require('mongodb');                                                                                     
+const passport = require('passport');
 const url = `mongodb+srv://admin:admin@cluster0.nrkzu.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
 
-
+//OAUTH
+require('./auth');
 
 //MIDDLEWARE
 app.use(cors());
@@ -27,9 +32,43 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-//REQUESTS
+//Om voegt sessiosId als cookie toe
+app.use(session({secret: "cats"}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+function isLoggedIn(req, res, next) {
+req.user ? next() : res.sendStatus(401);
+}
+
+//ROUTES
 app.use('/', reqRouter)
 
+
+.get('/', (req, res) => {
+    res.send('<a href="/auth/google">Authenticate with Google </a>');
+})
+.get('/auth/google',
+    passport.authenticate('google', {scope: ['email', 'profile']})
+)
+.get('/auth/google/callback',
+    passport.authenticate('google',{
+        successRedirect: '/protected',
+        failureRedirect: '/auth/failure'
+    })
+)
+
+.get('/protected', isLoggedIn, (req, res) => {
+    res.send(`Welcome ${req.user.displayName}!`);
+})
+.get('/auth/failure', (req, res) =>{
+    res.send('authentication failed');
+})
+.get('/logout', (req, res) => {
+    req.logout();
+    req.session.destroy();
+    res.send('You are logged out!');
+})
 //get htmlpage
 .get('/index',(req, res) => {
     res.sendFile(__dirname + '/public/index.html');  //use dirname instead of full directory path
