@@ -59,6 +59,7 @@ app.use('/', reqRouter)
 )
 
 .get('/protected', isLoggedIn, (req, res) => {
+    console.log("user info", req.user);
     res.send(`Welcome ${req.user.displayName}!`);
 })
 .get('/auth/failure', (req, res) =>{
