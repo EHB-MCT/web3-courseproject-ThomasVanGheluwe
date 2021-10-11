@@ -33,7 +33,7 @@ app.use(express.urlencoded({
 }));
 
 //Om voegt sessiosId als cookie toe
-app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
+app.use(session({secret: "cats"}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -47,8 +47,8 @@ app.use('/', reqRouter)
 
 
 .get('/login', (req, res) => {
-    //res.send('<a href="/auth/google">Authenticate with Google </a>');
-    res.sendFile(__dirname + '/login.html');
+    res.send('<a href="/auth/google">Authenticate with Google </a>');
+    //res.sendFile(__dirname + '/login.html');
 })
 //scope = the specified data we get returned by google, in this case, email & profile data
 //prompt: 'select_account', makes sure you always can choose a google account instead of using the one that's already logged in
@@ -64,6 +64,7 @@ app.use('/', reqRouter)
 .get('/protected', isLoggedIn, (req, res) => {
     console.log("user info", req.user);
     res.send(`Welcome ${req.user.displayName}!`);
+    //res.send(req.user);
 })
 .get('/auth/failure', (req, res) =>{
     res.send('authentication failed');
