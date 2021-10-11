@@ -47,7 +47,8 @@ app.use('/', reqRouter)
 
 
 .get('/login', (req, res) => {
-    res.send('<a href="/auth/google">Authenticate with Google </a>');
+    //res.send('<a href="/auth/google">Authenticate with Google </a>');
+    res.sendFile(__dirname + '/login.html');
 })
 //scope = the specified data we get returned by google, in this case, email & profile data
 //prompt: 'select_account', makes sure you always can choose a google account instead of using the one that's already logged in
