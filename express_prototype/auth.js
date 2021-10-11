@@ -9,12 +9,12 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`
+    callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
+    passReqToCallback: true,
   },
-  function(accessToken, refreshToken, profile, cb) {
-      return cb(null, profile);
-  }
-));
+  function(request, accessToken, refreshToken, profile, done) {
+    return done(null, profile);
+}));
 
 
 passport.serializeUser((user, done) => {

@@ -33,11 +33,7 @@ app.use(express.urlencoded({
 }));
 
 //Om voegt sessiosId als cookie toe
-app.use(session(
-    {
-    secret: "cats"
-    }
-));
+app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -50,12 +46,13 @@ req.user ? next() : res.sendStatus(401);
 app.use('/', reqRouter)
 
 
-.get('/', (req, res) => {
+.get('/login', (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google </a>');
 })
 //scope = the specified data we get returned by google, in this case, email & profile data
+//prompt: 'select_account', makes sure you always can choose a google account instead of using the one that's already logged in
 .get('/auth/google',
-    passport.authenticate('google', {scope: ['email', 'profile']})
+    passport.authenticate('google', {scope: ['email', 'profile'], prompt: 'select_account'})
 )
 .get('/auth/google/callback',
     passport.authenticate('google',{
@@ -63,19 +60,18 @@ app.use('/', reqRouter)
         failureRedirect: '/auth/failure'
     })
 )
-
 .get('/protected', isLoggedIn, (req, res) => {
     console.log("user info", req.user);
     res.send(`Welcome ${req.user.displayName}!`);
 })
 .get('/auth/failure', (req, res) =>{
     res.send('authentication failed');
-    res.redirect('/');
 })
 .get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
     res.send('You are logged out!');
+    console.log("user info after logout: ", req.user);  
 })
 //get htmlpage
 .get('/index',(req, res) => {
