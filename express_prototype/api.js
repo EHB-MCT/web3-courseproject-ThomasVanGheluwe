@@ -8,19 +8,18 @@ const session = require('express-session');
 const fs = require('fs');
 const cors = require('cors');
 const app = express();
-const port = process.env.PORT;
+const port =  process.env.PORT;
 const reqRouter = express.Router();
 
 
 
 //MongoDB
 let db;
-const dbName = "PrototypeBackend";
 const collectionName = "items";
 const {MongoClient, ObjectId}  = require('mongodb');                                                                                     
 const passport = require('passport');
-const url = `mongodb+srv://admin:admin@cluster0.nrkzu.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
+const url = process.env.DB_URL;
+const client = new MongoClient(url , {useNewUrlParser: true, useUnifiedTopology: true});
 
 
 //OAUTH
@@ -34,10 +33,15 @@ app.use(express.urlencoded({
 }));
 
 //Om voegt sessiosId als cookie toe
-app.use(session({secret: "cats"}));
+app.use(session(
+    {
+    secret: "cats"
+    }
+));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//checks if user is logged in
 function isLoggedIn(req, res, next) {
 req.user ? next() : res.sendStatus(401);
 }
@@ -49,6 +53,7 @@ app.use('/', reqRouter)
 .get('/', (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google </a>');
 })
+//scope = the specified data we get returned by google, in this case, email & profile data
 .get('/auth/google',
     passport.authenticate('google', {scope: ['email', 'profile']})
 )
@@ -65,6 +70,7 @@ app.use('/', reqRouter)
 })
 .get('/auth/failure', (req, res) =>{
     res.send('authentication failed');
+    res.redirect('/');
 })
 .get('/logout', (req, res) => {
     req.logout();
@@ -156,7 +162,7 @@ app.listen(port, () => {
         if(err){
             throw err;
         }
-        db = client.db(dbName);
-        console.log(`Connected to: ${dbName}`);
+        db = client.db(process.env.DB_NAME);
+        console.log(`Connected to: ${process.env.DB_NAME}`);
     });
 });
