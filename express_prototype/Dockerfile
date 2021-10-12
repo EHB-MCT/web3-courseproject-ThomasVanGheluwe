@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /usr/app
 
 #copy all package json files to work directory
-COPY package*.json .
+COPY package*.json ./
 
 #install node modules
 RUN npm install
