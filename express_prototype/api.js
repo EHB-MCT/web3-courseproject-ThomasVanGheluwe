@@ -92,6 +92,15 @@ app.use('/', reqRouter)
     res.json({result: number*number});
 })
 
+.post('/accountExist', (req,res) => {
+    console.log(req.body);
+    db.collection(collectionName).findOne({"email": req.body.email}, (error, result) => {
+        if(error){
+            return res.status(500).send(error);
+        }
+        res.json(result);
+    });
+})
 //post saved text file in public folder
 .post('/save', (req,res) => {
     const data = req.body;
