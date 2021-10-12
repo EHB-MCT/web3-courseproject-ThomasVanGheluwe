@@ -1,20 +1,20 @@
+#pull node version 14
 FROM node:14
 
-# Create app directory
-WORKDIR /usr/src/app
+#create directory
+WORKDIR /usr/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+#copy all package json files to work directory
+COPY package*.json .
 
+#install node modules
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
 
-# Bundle app source
+#directory to workdirectory except nodemodules if dockerignore file exist
 COPY . .
 
+#open port 3000
 EXPOSE 1616
 
+#run start script
 CMD [ "npm", "start" ]
