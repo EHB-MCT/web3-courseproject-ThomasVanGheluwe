@@ -7,16 +7,16 @@ import DiscordComponent from './components/DiscordComponent'
 
 export default function App(){
 
-  let [openDiscord, setOpenDiscord] = useState(false);
+  let [toggleDiscord, setToggleDiscord] = useState(false);
 
   function setDiscord(){
-    openDiscord ? setOpenDiscord(false) : setOpenDiscord(true);
+    toggleDiscord ? setToggleDiscord(false) : setToggleDiscord(true);
   }
 
     return (
       <div >
         <ButtonComponent state={setDiscord} logo={discordLogo}/>
-        {openDiscord ? <DiscordComponent/> : !openDiscord}
+        {toggleDiscord ? <DiscordComponent/> : !toggleDiscord}
         
     </div>
     )
