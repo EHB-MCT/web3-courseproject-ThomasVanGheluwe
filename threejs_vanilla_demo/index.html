@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+		<script>
+            //create new scene
+			const scene = new THREE.Scene();
+            //create camera (fov, aspect ratio, near clipping plane, far clipping plane) clipping plane
+            //clipping plane: objects that are further away of these values won't be rendered
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            //create renderer
+            const renderer = new THREE.WebGLRenderer();
+            //size the app will be rendered
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            //add renederer to html
+            document.body.appendChild( renderer.domElement );
+
+            //boxgeometry is a cube
+            const geometry = new THREE.BoxGeometry();
+            //add a material
+            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            //mesh creates the geometry and applies the material
+            const cube = new THREE.Mesh( geometry, material );
+            //add object to the scene
+            scene.add( cube );
+
+            //change position of the camera so the cube and camera are not in eachother
+            camera.position.z = 5;
+
+            //Create a function  to render the scene the function loops 60 times per second
+            function animate() {
+            requestAnimationFrame( animate );
+            //rotate the cube
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render( scene, camera );
+            }
+
+            animate();
+
+            
+		</script>
+	</body>
+</html>
