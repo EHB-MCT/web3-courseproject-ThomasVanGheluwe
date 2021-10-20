@@ -1,16 +1,26 @@
-import * as React from 'react'
-import WidgetBot from '@widgetbot/react-embed'
-import ToggleButton from './components/ToggleButton/ToggleButton.js'
+import React, {useState} from 'react'
+import discordLogo from './assets/logo.png';
+import ButtonComponent from './components/ButtonComponent';
+import DiscordComponent from './components/DiscordComponent'
 
 
-const App = () => (
-  <WidgetBot
-    server="899932052089106433"
-    channel="899932052089106436"
-    height="800"
-    width="400"
-    style={{ maxHeight: "50vh", position: "absolute" }} />
-)
 
-export default App
+export default function App(){
+
+  let [openDiscord, setOpenDiscord] = useState(false);
+
+  function setDiscord(){
+    openDiscord ? setOpenDiscord(false) : setOpenDiscord(true);
+  }
+
+    return (
+      <div >
+        <ButtonComponent state={setDiscord} logo={discordLogo}/>
+        {openDiscord ? <DiscordComponent/> : !openDiscord}
+        
+    </div>
+    )
+}
+
+
 
