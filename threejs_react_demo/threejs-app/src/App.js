@@ -22,7 +22,7 @@ const CameraController = () => {
   );
   return null;
 };
-//https://github.com/pmndrs/gltfjsx
+//https://github.com/pmndrs/gltfjsx  3D file moet in public folder zitten, commando runnen in public folder
 // function Model({ ...props }) {
 //   const group = useRef()
 //   const { nodes, materials } = useGLTF('/scene.gltf')
